@@ -2,12 +2,21 @@ import 'package:flutter/material.dart';
 
 import 'cache_value_with_default.dart';
 
-class CacheValueWithDefaultNotifier<T extends Object>
+/// Cache value with default value which notifies listeners upon changes.
+abstract class CacheValueWithDefaultNotifier<T extends Object>
+    implements CacheValueWithDefault<T>, Listenable {
+  factory CacheValueWithDefaultNotifier(
+      CacheValueWithDefault<T> cacheValueWithDefault) {
+    return _CacheValueWithDefaultNotifier(cacheValueWithDefault);
+  }
+}
+
+class _CacheValueWithDefaultNotifier<T extends Object>
     with ChangeNotifier
-    implements CacheValueWithDefault<T> {
+    implements CacheValueWithDefaultNotifier<T> {
   final CacheValueWithDefault<T> _cacheValueWithDefault;
 
-  CacheValueWithDefaultNotifier(this._cacheValueWithDefault);
+  _CacheValueWithDefaultNotifier(this._cacheValueWithDefault);
 
   @override
   Future<bool> clear() async {

@@ -1,6 +1,4 @@
-import 'package:flutter_cache/src/cache_value.dart';
-import 'package:flutter_cache/src/cache_value_def.dart';
-import 'package:flutter_cache/src/cache_value_with_default.dart';
+import 'package:flutter_cache/flutter_cache.dart';
 import 'package:mockito/mockito.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:test/test.dart';
@@ -20,9 +18,8 @@ void main() async {
   setUp(() async {
     await prefs.clear();
     prefsSpy = newPrefsSpy(prefs);
-    cacheValueWithDefault = CacheValueWithDefault(
-        cacheValue: CacheValue(prefs: prefsSpy, def: CacheValueDef.string(key)),
-        default_: default_);
+    cacheValueWithDefault =
+        CacheValueDefs.string(key).withDefault(default_).create(prefsSpy);
   });
 
   group('get', () {

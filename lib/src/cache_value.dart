@@ -3,16 +3,28 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'cache_value_def.dart';
 
 /// A value stored in a cache.
-class CacheValue<T extends Object> {
+abstract class CacheValue<T extends Object> {
+  factory CacheValue(
+      {required SharedPreferences prefs, required CacheValueDef<T> def}) {
+    return _CacheValue(prefs: prefs, def: def);
+  }
+
+  T? get();
+
+  Future<bool> set(T v);
+
+  Future<bool> clear();
+}
+
+class _CacheValue<T extends Object> implements CacheValue<T> {
   final SharedPreferences _prefs;
   final CacheValueDef<T> _def;
 
-  CacheValue({
-    required SharedPreferences prefs,
-    required CacheValueDef<T> def,
-  })  : _prefs = prefs,
+  _CacheValue({required SharedPreferences prefs, required CacheValueDef<T> def})
+      : _prefs = prefs,
         _def = def;
 
+  @override
   T? get() {
     final v = _prefs.getString(_key);
     if (v == null) {
@@ -27,10 +39,12 @@ class CacheValue<T extends Object> {
     }
   }
 
+  @override
   Future<bool> set(T v) async {
     return _prefs.setString(_key, _formatter(v));
   }
 
+  @override
   Future<bool> clear() async {
     return _prefs.remove(_key);
   }

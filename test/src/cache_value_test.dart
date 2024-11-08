@@ -1,5 +1,6 @@
 import 'package:flutter_cache/src/cache_value.dart';
 import 'package:flutter_cache/src/cache_value_def.dart';
+import 'package:flutter_cache/src/cache_value_defs.dart';
 import 'package:mockito/mockito.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:test/test.dart';
@@ -15,13 +16,10 @@ void main() async {
 
   late CacheValue<String> cacheValue;
 
-  CacheValue<T> create<T extends Object>(CacheValueDef<T> def) =>
-      CacheValue(prefs: prefsSpy, def: def);
-
   setUp(() async {
     await prefs.clear();
     prefsSpy = newPrefsSpy(prefs);
-    cacheValue = create(CacheValueDef.string(key));
+    cacheValue = CacheValueDef.string(key).create(prefsSpy);
   });
 
   group('get', () {
@@ -35,10 +33,8 @@ void main() async {
     });
 
     test('set with invalid value --> null', () async {
-      final cacheValue = create(CacheValueDef(
-          key: key, formatter: (v) => v.toString(), parser: int.parse));
-      prefs.setString(key, 'not int');
-      expect(cacheValue.get(), isNull);
+      await cacheValue.set('not int');
+      expect(CacheValueDefs.int_(key).create(prefs).get(), isNull);
     });
   });
 
@@ -60,10 +56,13 @@ void main() async {
     });
 
     test('formats', () async {
-      final cacheValue = create(CacheValueDef(
-          key: key, formatter: (v) => 'formatted $v', parser: (v) => v));
-      cacheValue.set('value');
-      expect(prefs.getString(key), 'formatted value');
+      final formattingCacheValue = CacheValueDefs.value(
+        key: key,
+        formatter: (v) => 'formatted $v',
+        parser: (v) => v,
+      ).create(prefs);
+      formattingCacheValue.set('value');
+      expect(cacheValue.get(), 'formatted value');
     });
   });
 

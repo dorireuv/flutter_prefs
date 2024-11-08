@@ -5,26 +5,48 @@ import 'cache_value_with_default_def.dart';
 
 /// A value stored in a cache with a but instead of setting the default value,
 /// the cache remains clear.
-class CacheValueWithDefault<T extends Object> {
+abstract class CacheValueWithDefault<T extends Object> {
+  factory CacheValueWithDefault({
+    required CacheValue<T> cacheValue,
+    required T default_,
+  }) {
+    return _CacheValueWithDefault(cacheValue: cacheValue, default_: default_);
+  }
+
+  T get default_;
+
+  T get();
+
+  Future<bool> set(T v);
+
+  Future<bool> clear();
+}
+
+class _CacheValueWithDefault<T extends Object>
+    implements CacheValueWithDefault<T> {
   final CacheValue<T> _cacheValue;
   final T _default;
 
-  CacheValueWithDefault({
+  _CacheValueWithDefault({
     required CacheValue<T> cacheValue,
     required T default_,
   })  : _cacheValue = cacheValue,
         _default = default_;
 
+  @override
   T get default_ => _default;
 
+  @override
   T get() {
     return _cacheValue.getOrDefault(_default);
   }
 
+  @override
   Future<bool> set(T v) {
     return v != _default ? _cacheValue.set(v) : _cacheValue.clear();
   }
 
+  @override
   Future<bool> clear() {
     return _cacheValue.clear();
   }
