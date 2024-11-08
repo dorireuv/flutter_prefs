@@ -1,6 +1,5 @@
 import 'package:flutter_cache/src/cache_value.dart';
 import 'package:flutter_cache/src/cache_value_def.dart';
-import 'package:flutter_cache/src/cache_value_defs.dart';
 import 'package:mockito/mockito.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:test/test.dart';
@@ -9,6 +8,7 @@ import 'prefs_spy.dart';
 
 void main() async {
   const key = 'key';
+  const invalidValue = 'invalid_value';
 
   SharedPreferences.setMockInitialValues({});
   final prefs = await SharedPreferences.getInstance();
@@ -19,7 +19,8 @@ void main() async {
   setUp(() async {
     await prefs.clear();
     prefsSpy = newPrefsSpy(prefs);
-    cacheValue = CacheValueDef.string(key).create(prefsSpy);
+    cacheValue =
+        CacheValueDef.string(key, blacklisted: [invalidValue]).create(prefsSpy);
   });
 
   group('get', () {
@@ -33,8 +34,13 @@ void main() async {
     });
 
     test('set with invalid value --> null', () async {
+      await cacheValue.set(invalidValue);
+      expect(cacheValue.get(), isNull);
+    });
+
+    test('set but parser fails --> null', () async {
       await cacheValue.set('not int');
-      expect(CacheValueDefs.int_(key).create(prefs).get(), isNull);
+      expect(CacheValueDef.int_(key).create(prefs).get(), isNull);
     });
   });
 
@@ -56,7 +62,7 @@ void main() async {
     });
 
     test('formats', () async {
-      final formattingCacheValue = CacheValueDefs.value(
+      final formattingCacheValue = CacheValueDef.value(
         key: key,
         formatter: (v) => 'formatted $v',
         parser: (v) => v,

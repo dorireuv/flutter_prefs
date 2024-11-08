@@ -1,5 +1,5 @@
 import 'package:flutter_cache/src/cache_value.dart';
-import 'package:flutter_cache/src/cache_value_defs.dart';
+import 'package:flutter_cache/src/cache_value_def.dart';
 import 'package:flutter_cache/src/cache_value_notifier.dart';
 import 'package:mockito/mockito.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -17,8 +17,7 @@ void main() async {
   setUp(() async {
     await prefs.clear();
     reset(listener);
-    cacheValueNotifier =
-        CacheValueDefs.string(key).create(prefs).withNotifier();
+    cacheValueNotifier = CacheValueDef.string(key).create(prefs).withNotifier();
     cacheValueNotifier.addListener(listener);
   });
 

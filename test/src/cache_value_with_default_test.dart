@@ -19,7 +19,7 @@ void main() async {
     await prefs.clear();
     prefsSpy = newPrefsSpy(prefs);
     cacheValueWithDefault =
-        CacheValueDefs.string(key).withDefault(default_).create(prefsSpy);
+        CacheValueDef.string(key).withDefault(default_).create(prefsSpy);
   });
 
   group('get', () {

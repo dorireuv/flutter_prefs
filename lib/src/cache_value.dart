@@ -26,22 +26,22 @@ class _CacheValue<T extends Object> implements CacheValue<T> {
 
   @override
   T? get() {
-    final v = _prefs.getString(_key);
+    final stringValue = _prefs.getString(_key);
+    if (stringValue == null) {
+      return null;
+    }
+
+    final v = _tryParse(stringValue);
     if (v == null) {
       return null;
     }
 
-    try {
-      return _parser(v);
-    } catch (e) {
-      // Failed to parse, treat it as not available.
-      return null;
-    }
+    return _filterInvalid(v);
   }
 
   @override
   Future<bool> set(T v) async {
-    return _prefs.setString(_key, _formatter(v));
+    return _isValid(v) ? await _prefs.setString(_key, _formatter(v)) : false;
   }
 
   @override
@@ -49,11 +49,35 @@ class _CacheValue<T extends Object> implements CacheValue<T> {
     return _prefs.remove(_key);
   }
 
+  T? _tryParse(String stringValue) {
+    try {
+      return _parser(stringValue);
+    } catch (e) {
+      // Failed to parse, treat it as not available.
+      return null;
+    }
+  }
+
+  T? _filterInvalid(T v) {
+    return _isValid(v) ? v : null;
+  }
+
+  bool _isValid(T v) {
+    final validator = _validator;
+    if (validator == null) {
+      return true;
+    }
+
+    return validator(v);
+  }
+
   String get _key => _def.key;
 
   Formatter<T> get _formatter => _def.formatter;
 
   Parser<T> get _parser => _def.parser;
+
+  Validator<T>? get _validator => _def.validator;
 }
 
 extension CacheValueExpressiveApiExtension<T extends Object> on CacheValue<T> {
