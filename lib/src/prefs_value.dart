@@ -1,12 +1,12 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'cache_value_def.dart';
+import 'prefs_value_def.dart';
 
-/// A value stored in a cache.
-abstract class CacheValue<T extends Object> {
-  factory CacheValue(
-      {required SharedPreferences prefs, required CacheValueDef<T> def}) {
-    return _CacheValue(prefs: prefs, def: def);
+/// A value stored in a prefs.
+abstract class PrefsValue<T extends Object> {
+  factory PrefsValue(
+      {required SharedPreferences prefs, required PrefsValueDef<T> def}) {
+    return _PrefsValue(prefs: prefs, def: def);
   }
 
   T? get();
@@ -16,11 +16,11 @@ abstract class CacheValue<T extends Object> {
   Future<bool> clear();
 }
 
-class _CacheValue<T extends Object> implements CacheValue<T> {
+class _PrefsValue<T extends Object> implements PrefsValue<T> {
   final SharedPreferences _prefs;
-  final CacheValueDef<T> _def;
+  final PrefsValueDef<T> _def;
 
-  _CacheValue({required SharedPreferences prefs, required CacheValueDef<T> def})
+  _PrefsValue({required SharedPreferences prefs, required PrefsValueDef<T> def})
       : _prefs = prefs,
         _def = def;
 
@@ -80,7 +80,7 @@ class _CacheValue<T extends Object> implements CacheValue<T> {
   Validator<T>? get _validator => _def.validator;
 }
 
-extension CacheValueExpressiveApiExtension<T extends Object> on CacheValue<T> {
+extension PrefsValueExpressiveApiExtension<T extends Object> on PrefsValue<T> {
   T getOrDefault(T default_) {
     return get() ?? default_;
   }
@@ -98,8 +98,8 @@ extension CacheValueExpressiveApiExtension<T extends Object> on CacheValue<T> {
   }
 }
 
-extension CacheValueFromDefExtension<T extends Object> on CacheValueDef<T> {
-  CacheValue<T> create(SharedPreferences prefs) {
-    return CacheValue(prefs: prefs, def: this);
+extension PrefsValueFromDefExtension<T extends Object> on PrefsValueDef<T> {
+  PrefsValue<T> create(SharedPreferences prefs) {
+    return PrefsValue(prefs: prefs, def: this);
   }
 }

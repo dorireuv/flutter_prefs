@@ -2,31 +2,31 @@ typedef Formatter<T> = String Function(T);
 typedef Parser<T> = T? Function(String);
 typedef Validator<T> = bool Function(T);
 
-abstract class CacheValueDef<T extends Object> {
+abstract class PrefsValueDef<T extends Object> {
   String get key;
   Formatter<T> get formatter;
   Parser<T> get parser;
   Validator<T>? get validator;
 
-  static CacheValueDef<T> value<T extends Object>({
+  static PrefsValueDef<T> value<T extends Object>({
     required String key,
     required Formatter<T> formatter,
     required Parser<T> parser,
     Validator<T>? validator,
   }) =>
-      _CacheValueDef(
+      _PrefsValueDef(
           key: key, formatter: formatter, parser: parser, validator: validator);
 
-  static CacheValueDef<bool> bool_(String key) => _CacheValueDef(
+  static PrefsValueDef<bool> bool_(String key) => _PrefsValueDef(
       key: key, formatter: (v) => v.toString(), parser: bool.tryParse);
 
-  static CacheValueDef<int> int_(String key) => _CacheValueDef(
+  static PrefsValueDef<int> int_(String key) => _PrefsValueDef(
       key: key, formatter: (v) => v.toString(), parser: int.tryParse);
 
-  static CacheValueDef<String> string(String key,
+  static PrefsValueDef<String> string(String key,
       {List<String>? whitelisted, List<String>? blacklisted}) {
     assert(whitelisted == null || blacklisted == null);
-    return _CacheValueDef(
+    return _PrefsValueDef(
       key: key,
       formatter: (v) => v,
       parser: (v) => v,
@@ -35,7 +35,7 @@ abstract class CacheValueDef<T extends Object> {
   }
 }
 
-class _CacheValueDef<T extends Object> implements CacheValueDef<T> {
+class _PrefsValueDef<T extends Object> implements PrefsValueDef<T> {
   @override
   final String key;
   @override
@@ -45,7 +45,7 @@ class _CacheValueDef<T extends Object> implements CacheValueDef<T> {
   @override
   final Validator<T>? validator;
 
-  const _CacheValueDef({
+  const _PrefsValueDef({
     required this.key,
     required this.formatter,
     required this.parser,

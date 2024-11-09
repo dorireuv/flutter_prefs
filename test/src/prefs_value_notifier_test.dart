@@ -1,6 +1,6 @@
-import 'package:flutter_cache/src/cache_value.dart';
-import 'package:flutter_cache/src/cache_value_def.dart';
-import 'package:flutter_cache/src/cache_value_notifier.dart';
+import 'package:flutter_prefs/src/prefs_value.dart';
+import 'package:flutter_prefs/src/prefs_value_def.dart';
+import 'package:flutter_prefs/src/prefs_value_notifier.dart';
 import 'package:mockito/mockito.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:test/test.dart';
@@ -11,48 +11,48 @@ void main() async {
   SharedPreferences.setMockInitialValues({});
   final prefs = await SharedPreferences.getInstance();
 
-  late CacheValueNotifier<String> cacheValueNotifier;
+  late PrefsValueNotifier<String> prefsValueNotifier;
   final listener = _Listener();
 
   setUp(() async {
     await prefs.clear();
     reset(listener);
-    cacheValueNotifier = CacheValueDef.string(key).create(prefs).withNotifier();
-    cacheValueNotifier.addListener(listener);
+    prefsValueNotifier = PrefsValueDef.string(key).create(prefs).withNotifier();
+    prefsValueNotifier.addListener(listener);
   });
 
   tearDown(() {
-    cacheValueNotifier.removeListener(listener);
+    prefsValueNotifier.removeListener(listener);
   });
 
   group('set', () {
     test('once -> notify once', () async {
-      await cacheValueNotifier.set('value');
+      await prefsValueNotifier.set('value');
       verify(listener()).called(1);
     });
 
     test('twice -> notify twice', () async {
-      await cacheValueNotifier.set('value');
-      await cacheValueNotifier.set('value');
+      await prefsValueNotifier.set('value');
+      await prefsValueNotifier.set('value');
       verify(listener()).called(2);
     });
   });
 
   group('setIfChanged', () {
     test('changed --> notifies', () async {
-      await cacheValueNotifier.set('value1');
+      await prefsValueNotifier.set('value1');
       reset(listener);
 
-      await cacheValueNotifier.setIfChanged('value2');
+      await prefsValueNotifier.setIfChanged('value2');
 
       verify(listener()).called(1);
     });
 
     test('not changed --> does not notify', () async {
-      await cacheValueNotifier.set('value');
+      await prefsValueNotifier.set('value');
       reset(listener);
 
-      await cacheValueNotifier.setIfChanged('value');
+      await prefsValueNotifier.setIfChanged('value');
 
       verifyNever(listener());
     });
@@ -60,39 +60,39 @@ void main() async {
 
   group('clear', () {
     test('once -> notify once', () async {
-      await cacheValueNotifier.clear();
+      await prefsValueNotifier.clear();
       verify(listener()).called(1);
     });
 
     test('twice -> notify twice', () async {
-      await cacheValueNotifier.clear();
-      await cacheValueNotifier.clear();
+      await prefsValueNotifier.clear();
+      await prefsValueNotifier.clear();
       verify(listener()).called(2);
     });
   });
 
   group('clearIfSet', () {
     test('set --> notifies', () async {
-      await cacheValueNotifier.set('value');
+      await prefsValueNotifier.set('value');
       reset(listener);
 
-      await cacheValueNotifier.clearIfSet();
+      await prefsValueNotifier.clearIfSet();
 
       verify(listener()).called(1);
     });
 
     test('not set --> does not notify', () async {
-      await cacheValueNotifier.clearIfSet();
+      await prefsValueNotifier.clearIfSet();
       verifyNever(listener());
     });
   });
 
   group('setOrClear', () {
     test('notifies', () async {
-      await cacheValueNotifier.set('value');
+      await prefsValueNotifier.set('value');
       reset(listener);
 
-      await cacheValueNotifier.setIfChangedOrClearIfSet(null);
+      await prefsValueNotifier.setIfChangedOrClearIfSet(null);
 
       verify(listener()).called(1);
     });
