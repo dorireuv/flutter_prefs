@@ -3,8 +3,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'prefs_value.dart';
 import 'prefs_value_with_default_def.dart';
 
-/// A value stored in a prefs with a but instead of setting the default value,
-/// the prefs remains clear.
+/// A value stored in a prefs but instead of setting the default value, the
+/// prefs remain cleared. Also the get method returns the default value if no
+/// value is stored.
 abstract class PrefsValueWithDefault<T extends Object> {
   factory PrefsValueWithDefault({
     required PrefsValue<T> prefsValue,
@@ -72,5 +73,12 @@ extension PrefsValueWithDefaultFromDefExtension<T extends Object>
   PrefsValueWithDefault<T> create(SharedPreferences prefs) {
     return PrefsValueWithDefault(
         prefsValue: PrefsValue(prefs: prefs, def: this), default_: default_);
+  }
+}
+
+extension PrefsValueWithDefaultFromPrefsValueExtension<T extends Object>
+    on PrefsValue<T> {
+  PrefsValueWithDefault<T> withDefault(T default_) {
+    return PrefsValueWithDefault(prefsValue: this, default_: default_);
   }
 }
