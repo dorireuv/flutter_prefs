@@ -1,10 +1,14 @@
-import 'package:flutter_prefs/flutter_prefs.dart';
+import 'package:flutter_prefs/src/prefs_key.dart';
+import 'package:flutter_prefs/src/prefs_value_def.dart';
+import 'package:flutter_prefs/src/prefs_value_with_default.dart';
+import 'package:flutter_prefs/src/prefs_value_with_default_def.dart';
+import 'package:flutter_prefs/src/prefs_value_with_default_notifier.dart';
 import 'package:mockito/mockito.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:test/test.dart';
 
 void main() async {
-  const key = 'key';
+  const key = PrefsKey.global('key');
   const default_ = 'default';
 
   SharedPreferences.setMockInitialValues({});

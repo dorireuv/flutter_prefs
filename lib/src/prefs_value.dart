@@ -1,5 +1,6 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'prefs_key.dart';
 import 'prefs_value_def.dart';
 
 /// A value stored in a prefs.
@@ -26,7 +27,7 @@ class _PrefsValue<T extends Object> implements PrefsValue<T> {
 
   @override
   T? get() {
-    final stringValue = _prefs.getString(_key);
+    final stringValue = _prefs.getString(_key.key);
     if (stringValue == null) {
       return null;
     }
@@ -41,12 +42,14 @@ class _PrefsValue<T extends Object> implements PrefsValue<T> {
 
   @override
   Future<bool> set(T v) async {
-    return _isValid(v) ? await _prefs.setString(_key, _formatter(v)) : false;
+    return _isValid(v)
+        ? await _prefs.setString(_key.key, _formatter(v))
+        : false;
   }
 
   @override
   Future<bool> clear() async {
-    return _prefs.remove(_key);
+    return _prefs.remove(_key.key);
   }
 
   T? _tryParse(String stringValue) {
@@ -71,7 +74,7 @@ class _PrefsValue<T extends Object> implements PrefsValue<T> {
     return validator(v);
   }
 
-  String get _key => _def.key;
+  PrefsKey get _key => _def.key;
 
   Formatter<T> get _formatter => _def.formatter;
 

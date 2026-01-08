@@ -1,3 +1,4 @@
+import 'package:flutter_prefs/src/prefs_key.dart';
 import 'package:flutter_prefs/src/prefs_value.dart';
 import 'package:flutter_prefs/src/prefs_value_def.dart';
 import 'package:mockito/mockito.dart';
@@ -7,7 +8,7 @@ import 'package:test/test.dart';
 import 'prefs_spy.dart';
 
 void main() async {
-  const key = 'key';
+  const key = PrefsKey.global('key');
   const invalidValue = 'invalid_value';
 
   SharedPreferences.setMockInitialValues({});
@@ -63,7 +64,7 @@ void main() async {
 
     test('formats', () async {
       final formattingPrefsValue = PrefsValueDef.value(
-        key: key,
+        key,
         formatter: (v) => 'formatted $v',
         parser: (v) => v,
       ).create(prefs);

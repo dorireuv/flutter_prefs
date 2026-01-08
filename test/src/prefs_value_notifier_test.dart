@@ -1,3 +1,4 @@
+import 'package:flutter_prefs/src/prefs_key.dart';
 import 'package:flutter_prefs/src/prefs_value.dart';
 import 'package:flutter_prefs/src/prefs_value_def.dart';
 import 'package:flutter_prefs/src/prefs_value_notifier.dart';
@@ -6,7 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:test/test.dart';
 
 void main() async {
-  const key = 'key';
+  const key = PrefsKey.global('key');
 
   SharedPreferences.setMockInitialValues({});
   final prefs = await SharedPreferences.getInstance();

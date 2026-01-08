@@ -1,3 +1,4 @@
+import 'prefs_key.dart';
 import 'prefs_value_def.dart';
 
 abstract class PrefsValueWithDefaultDef<T extends Object>
@@ -17,7 +18,7 @@ class _PrefsValueWithDefaultDef<T extends Object>
       : _def = def;
 
   @override
-  String get key => _def.key;
+  PrefsKey get key => _def.key;
 
   @override
   Formatter<T> get formatter => _def.formatter;

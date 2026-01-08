@@ -1,15 +1,17 @@
+import 'prefs_key.dart';
+
 typedef Formatter<T> = String Function(T);
 typedef Parser<T> = T? Function(String);
 typedef Validator<T> = bool Function(T);
 
 abstract class PrefsValueDef<T extends Object> {
-  String get key;
+  PrefsKey get key;
   Formatter<T> get formatter;
   Parser<T> get parser;
   Validator<T>? get validator;
 
-  static PrefsValueDef<T> value<T extends Object>({
-    required String key,
+  static PrefsValueDef<T> value<T extends Object>(
+    PrefsKey key, {
     required Formatter<T> formatter,
     required Parser<T> parser,
     Validator<T>? validator,
@@ -17,13 +19,13 @@ abstract class PrefsValueDef<T extends Object> {
       _PrefsValueDef(
           key: key, formatter: formatter, parser: parser, validator: validator);
 
-  static PrefsValueDef<bool> bool_(String key) => _PrefsValueDef(
+  static PrefsValueDef<bool> bool_(PrefsKey key) => _PrefsValueDef(
       key: key, formatter: (v) => v.toString(), parser: bool.tryParse);
 
-  static PrefsValueDef<int> int_(String key) => _PrefsValueDef(
+  static PrefsValueDef<int> int_(PrefsKey key) => _PrefsValueDef(
       key: key, formatter: (v) => v.toString(), parser: int.tryParse);
 
-  static PrefsValueDef<String> string(String key,
+  static PrefsValueDef<String> string(PrefsKey key,
       {List<String>? whitelisted, List<String>? blacklisted}) {
     assert(whitelisted == null || blacklisted == null);
     return _PrefsValueDef(
@@ -37,7 +39,7 @@ abstract class PrefsValueDef<T extends Object> {
 
 class _PrefsValueDef<T extends Object> implements PrefsValueDef<T> {
   @override
-  final String key;
+  final PrefsKey key;
   @override
   final Formatter<T> formatter;
   @override
