@@ -4,13 +4,13 @@ typedef Formatter<T> = String Function(T);
 typedef Parser<T> = T? Function(String);
 typedef Validator<T> = bool Function(T);
 
-abstract class PrefsValueDef<T extends Object> {
+abstract class PrefsValueDef<T> {
   PrefsKey get key;
   Formatter<T> get formatter;
   Parser<T> get parser;
   Validator<T>? get validator;
 
-  static PrefsValueDef<T> value<T extends Object>(
+  static PrefsValueDef<T> value<T>(
     PrefsKey key, {
     required Formatter<T> formatter,
     required Parser<T> parser,
@@ -37,7 +37,7 @@ abstract class PrefsValueDef<T extends Object> {
   }
 }
 
-class _PrefsValueDef<T extends Object> implements PrefsValueDef<T> {
+class _PrefsValueDef<T> implements PrefsValueDef<T> {
   @override
   final PrefsKey key;
   @override

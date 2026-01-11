@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'prefs_value_with_default.dart';
 
 /// Prefs value with default value which notifies listeners upon changes.
-abstract class PrefsValueWithDefaultNotifier<T extends Object>
+abstract class PrefsValueWithDefaultNotifier<T>
     implements PrefsValueWithDefault<T>, Listenable {
   factory PrefsValueWithDefaultNotifier(
       PrefsValueWithDefault<T> prefsValueWithDefault) {
@@ -11,7 +11,7 @@ abstract class PrefsValueWithDefaultNotifier<T extends Object>
   }
 }
 
-class _PrefsValueWithDefaultNotifier<T extends Object>
+class _PrefsValueWithDefaultNotifier<T>
     with ChangeNotifier
     implements PrefsValueWithDefaultNotifier<T> {
   final PrefsValueWithDefault<T> _prefsValueWithDefault;
@@ -47,7 +47,7 @@ class _PrefsValueWithDefaultNotifier<T extends Object>
   }
 }
 
-extension PrefsValueWithDefaultToWithNotifierExtension<T extends Object>
+extension PrefsValueWithDefaultToWithNotifierExtension<T>
     on PrefsValueWithDefault<T> {
   PrefsValueWithDefaultNotifier<T> withNotifier() =>
       PrefsValueWithDefaultNotifier(this);

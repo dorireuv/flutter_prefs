@@ -1,13 +1,11 @@
 import 'prefs_key.dart';
 import 'prefs_value_def.dart';
 
-abstract class PrefsValueWithDefaultDef<T extends Object>
-    extends PrefsValueDef<T> {
+abstract class PrefsValueWithDefaultDef<T> extends PrefsValueDef<T> {
   T get default_;
 }
 
-class _PrefsValueWithDefaultDef<T extends Object>
-    implements PrefsValueWithDefaultDef<T> {
+class _PrefsValueWithDefaultDef<T> implements PrefsValueWithDefaultDef<T> {
   final PrefsValueDef<T> _def;
 
   @override
@@ -30,8 +28,7 @@ class _PrefsValueWithDefaultDef<T extends Object>
   Validator<T>? get validator => _def.validator;
 }
 
-extension PrefsValueDefToWithDefaultExtension<T extends Object>
-    on PrefsValueDef<T> {
+extension PrefsValueDefToWithDefaultExtension<T> on PrefsValueDef<T> {
   PrefsValueWithDefaultDef<T> withDefault(T default_) {
     final validator_ = validator;
     if (validator_ != null && !validator_(default_)) {

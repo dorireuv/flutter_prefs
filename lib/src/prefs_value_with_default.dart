@@ -6,7 +6,7 @@ import 'prefs_value_with_default_def.dart';
 /// A value stored in a prefs but instead of setting the default value, the
 /// prefs remain cleared. Also the get method returns the default value if no
 /// value is stored.
-abstract class PrefsValueWithDefault<T extends Object> {
+abstract class PrefsValueWithDefault<T> {
   factory PrefsValueWithDefault({
     required PrefsValue<T> prefsValue,
     required T default_,
@@ -23,8 +23,7 @@ abstract class PrefsValueWithDefault<T extends Object> {
   Future<bool> clear();
 }
 
-class _PrefsValueWithDefault<T extends Object>
-    implements PrefsValueWithDefault<T> {
+class _PrefsValueWithDefault<T> implements PrefsValueWithDefault<T> {
   final PrefsValue<T> _prefsValue;
   final T _default;
 
@@ -53,7 +52,7 @@ class _PrefsValueWithDefault<T extends Object>
   }
 }
 
-extension PrefsValueWithDefaultExpressiveApiExtension<T extends Object>
+extension PrefsValueWithDefaultExpressiveApiExtension<T>
     on PrefsValueWithDefault<T> {
   Future<bool> setIfChanged(T v) async {
     return v != get() ? await set(v) : true;
@@ -68,7 +67,7 @@ extension PrefsValueWithDefaultExpressiveApiExtension<T extends Object>
   }
 }
 
-extension PrefsValueWithDefaultFromDefExtension<T extends Object>
+extension PrefsValueWithDefaultFromDefExtension<T>
     on PrefsValueWithDefaultDef<T> {
   PrefsValueWithDefault<T> create(SharedPreferences prefs) {
     return PrefsValueWithDefault(
@@ -76,8 +75,7 @@ extension PrefsValueWithDefaultFromDefExtension<T extends Object>
   }
 }
 
-extension PrefsValueWithDefaultFromPrefsValueExtension<T extends Object>
-    on PrefsValue<T> {
+extension PrefsValueWithDefaultFromPrefsValueExtension<T> on PrefsValue<T> {
   PrefsValueWithDefault<T> withDefault(T default_) {
     return PrefsValueWithDefault(prefsValue: this, default_: default_);
   }

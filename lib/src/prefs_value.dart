@@ -4,7 +4,7 @@ import 'prefs_key.dart';
 import 'prefs_value_def.dart';
 
 /// A value stored in a prefs.
-abstract class PrefsValue<T extends Object> {
+abstract class PrefsValue<T> {
   factory PrefsValue(
       {required SharedPreferences prefs, required PrefsValueDef<T> def}) {
     return _PrefsValue(prefs: prefs, def: def);
@@ -17,7 +17,7 @@ abstract class PrefsValue<T extends Object> {
   Future<bool> clear();
 }
 
-class _PrefsValue<T extends Object> implements PrefsValue<T> {
+class _PrefsValue<T> implements PrefsValue<T> {
   final SharedPreferences _prefs;
   final PrefsValueDef<T> _def;
 
@@ -83,7 +83,7 @@ class _PrefsValue<T extends Object> implements PrefsValue<T> {
   Validator<T>? get _validator => _def.validator;
 }
 
-extension PrefsValueExpressiveApiExtension<T extends Object> on PrefsValue<T> {
+extension PrefsValueExpressiveApiExtension<T> on PrefsValue<T> {
   T getOrDefault(T default_) {
     return get() ?? default_;
   }
@@ -101,7 +101,7 @@ extension PrefsValueExpressiveApiExtension<T extends Object> on PrefsValue<T> {
   }
 }
 
-extension PrefsValueFromDefExtension<T extends Object> on PrefsValueDef<T> {
+extension PrefsValueFromDefExtension<T> on PrefsValueDef<T> {
   PrefsValue<T> create(SharedPreferences prefs) {
     return PrefsValue(prefs: prefs, def: this);
   }

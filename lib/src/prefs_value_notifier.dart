@@ -2,14 +2,13 @@ import 'package:flutter/material.dart';
 
 import 'prefs_value.dart';
 
-abstract class PrefsValueNotifier<T extends Object>
-    implements PrefsValue<T>, Listenable {
+abstract class PrefsValueNotifier<T> implements PrefsValue<T>, Listenable {
   factory PrefsValueNotifier(PrefsValue<T> prefsValue) {
     return _PrefsValueNotifier(prefsValue);
   }
 }
 
-class _PrefsValueNotifier<T extends Object>
+class _PrefsValueNotifier<T>
     with ChangeNotifier
     implements PrefsValueNotifier<T> {
   final PrefsValue<T> _prefsValue;
@@ -42,6 +41,6 @@ class _PrefsValueNotifier<T extends Object>
   }
 }
 
-extension PrefsValueToWithNotifierExtension<T extends Object> on PrefsValue<T> {
+extension PrefsValueToWithNotifierExtension<T> on PrefsValue<T> {
   PrefsValueNotifier<T> withNotifier() => PrefsValueNotifier(this);
 }
