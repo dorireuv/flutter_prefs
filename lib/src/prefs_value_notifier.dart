@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' show ChangeNotifier, Listenable;
 
 import 'prefs_value.dart';
 
