@@ -1,6 +1,3 @@
-import 'package:flutter/foundation.dart' show immutable;
-
-@immutable
 abstract class PrefsKey {
   const factory PrefsKey.global(String key) = _GlobalPrefsKey;
   const factory PrefsKey.namespaced(String namespace, String key) =

@@ -1,7 +1,4 @@
-import 'package:flutter_prefs/src/prefs_key.dart';
-import 'package:flutter_prefs/src/prefs_value_def.dart';
-import 'package:flutter_prefs/src/prefs_value_with_default.dart';
-import 'package:flutter_prefs/src/prefs_value_with_default_def.dart';
+import 'package:flutter_prefs/flutter_prefs_value.dart';
 import 'package:mockito/mockito.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:test/test.dart';
