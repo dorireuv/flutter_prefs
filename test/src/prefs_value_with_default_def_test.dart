@@ -1,4 +1,4 @@
-import 'package:flutter_prefs/flutter_prefs_value.dart';
+import 'package:flutter_prefs/flutter_prefs.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

@@ -1,4 +1,4 @@
-import 'package:flutter_prefs/flutter_prefs_value.dart';
+import 'package:flutter_prefs/flutter_prefs.dart';
 import 'package:mockito/mockito.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:test/test.dart';
